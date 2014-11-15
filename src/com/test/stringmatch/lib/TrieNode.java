@@ -5,7 +5,9 @@ public class TrieNode
         private char node;
         private SMap childrens;
         private int value;
+        private int prefixValue;
         private boolean isComplete;
+        private boolean isPrefix;
 
         /**
          * Initialize with the default value.
@@ -17,6 +19,21 @@ public class TrieNode
             this.childrens = new SMap();
             this.value = -1;
             this.isComplete = false;
+            this.isPrefix = false;
+            this.prefixValue = -1;
+        }
+        /**
+         * Initialize with the default value and also accept prefix flag.
+         */
+        public TrieNode(char node, boolean isPrefix, int prefixValue)
+        {
+            super();
+            this.node = node;
+            this.childrens = new SMap();
+            this.value = -1;
+            this.isComplete = false;
+            this.isPrefix = isPrefix;
+            this.prefixValue = prefixValue;
         }
 
         /**
@@ -27,14 +44,18 @@ public class TrieNode
             childrens.put(node, trieNode);
         }
 
-        public SMap getChilderns()
+        public SMap getChildrens()
         {
             return childrens;
         }
-
         public char getNode()
         {
             return node;
+        }
+
+        public int getPrefixValue()
+        {
+            return prefixValue;
         }
 
         public int getValue()
@@ -45,6 +66,11 @@ public class TrieNode
         public boolean isComplete()
         {
             return isComplete;
+        }
+
+        public boolean isPrefix()
+        {
+            return isPrefix;
         }
 
         public void setChilderns(SMap childerns)
@@ -60,6 +86,16 @@ public class TrieNode
         public void setNode(char node)
         {
             this.node = node;
+        }
+
+        public void setPrefix(boolean isPrefix)
+        {
+            this.isPrefix = isPrefix;
+        }
+
+        public void setPrefixValue(int prefixValue)
+        {
+            this.prefixValue = prefixValue;
         }
 
         public void setValue(int value)
