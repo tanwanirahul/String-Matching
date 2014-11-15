@@ -3,7 +3,7 @@ package com.test.stringmatch.lib;
 public class TrieNode
 {
         private char node;
-        private SMap childerns;
+        private SMap childrens;
         private int value;
         private boolean isComplete;
 
@@ -14,7 +14,7 @@ public class TrieNode
         {
             super();
             this.node = node;
-            this.childerns = new SMap();
+            this.childrens = new SMap();
             this.value = -1;
             this.isComplete = false;
         }
@@ -24,12 +24,12 @@ public class TrieNode
          */
         public void addChild(char node, TrieNode trieNode)
         {
-            childerns.put(node, trieNode);
+            childrens.put(node, trieNode);
         }
 
         public SMap getChilderns()
         {
-            return childerns;
+            return childrens;
         }
 
         public char getNode()
@@ -49,7 +49,7 @@ public class TrieNode
 
         public void setChilderns(SMap childerns)
         {
-            this.childerns = childerns;
+            this.childrens = childerns;
         }
 
         public void setComplete(boolean isComplete)
