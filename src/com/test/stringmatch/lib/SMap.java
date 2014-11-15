@@ -97,7 +97,7 @@ public class SMap
      */
     public TrieNode get(char k)
     {
-        int hash = (int) k;
+        int hash = (int) k % get_capacity();
         Entry _entry = table[hash];
 
         while (_entry != null)
@@ -117,8 +117,15 @@ public class SMap
      */
     public void put(char k, TrieNode v)
     {
-        int hash = (int) k;
+        int hash = (int) k % get_capacity();
         Entry _entry = table[hash];
+
+        // There isn't any entry for this hashcode, add one.
+        if (_entry == null)
+        {
+            table[hash] = new Entry(k, v);
+            return;
+        }
 
         // Check if the first entry has the same key, if so, update the value.
         if (_entry.getKey() == k)
@@ -155,7 +162,7 @@ public class SMap
      */
     public Entry remove(char k)
     {
-        int hash = (int) k;
+        int hash = (int) k % get_capacity();
         Entry _entry = table[hash];
 
         // Null check. If null, there isn's any entry.
