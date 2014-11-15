@@ -95,7 +95,7 @@ public class SMap
     /**
      * Returns a value for the given key.
      */
-    public Entry get(char k)
+    public TrieNode get(char k)
     {
         int hash = (int) k;
         Entry _entry = table[hash];
@@ -104,7 +104,7 @@ public class SMap
         {
             if (_entry.getKey() == k)
             {
-                return _entry;
+                return _entry.getValue();
             }
             _entry = _entry.getNext();
         }
