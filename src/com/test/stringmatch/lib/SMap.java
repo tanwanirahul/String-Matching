@@ -7,10 +7,10 @@ public class SMap
 {
 
     /**
-     * Keeping default Map capacity to 16.
+     * Keeping default Map capacity to 32.
      * Since this is for a fairly simple use case, I won't deal with resizing etc.
      */
-    static final int DEFAULT_CAPACITY = 16;
+    static final int DEFAULT_CAPACITY = 32;
 
     /**
      * Hash table like, holds all the SMap entries.
@@ -24,16 +24,18 @@ public class SMap
 
     /**
      * Holds all the Map entries.
-     * For my string matching purpose, I know value type is int, and hence not making it a generic type.
+     * For my string matching purpose, I know value type is TrieNode, and hence not making it a generic type.
      */
     class Entry
     {
-        private final String key;
-        private int value;
+        private final char key;
+        private TrieNode value;
         private Entry next;
 
-
-        public Entry(String key, int value)
+        /*
+         * Initialize Entry table with default capacity.
+         */
+        public Entry(char key, TrieNode value)
         {
             super();
             this.key = key;
@@ -41,9 +43,15 @@ public class SMap
         }
 
 
-        public String getKey()
+        public TrieNode getValue()
         {
-            return key;
+            return value;
+        }
+
+
+        public void setValue(TrieNode value)
+        {
+            this.value = value;
         }
 
 
@@ -53,28 +61,19 @@ public class SMap
         }
 
 
-        public int getValue()
-        {
-            return value;
-        }
-
-
         public void setNext(Entry next)
         {
             this.next = next;
         }
 
 
-        public void setValue(int value)
+        public char getKey()
         {
-            this.value = value;
+            return key;
         }
     }
 
 
-    /*
-     * Initialize Entry table with default capacity.
-     */
     public SMap()
     {
         super();
@@ -96,14 +95,14 @@ public class SMap
     /**
      * Returns a value for the given key.
      */
-    public Entry get(String k)
+    public Entry get(char k)
     {
-        int hash = k.hashCode() % get_capacity();
+        int hash = (int) k;
         Entry _entry = table[hash];
 
         while (_entry != null)
         {
-            if (_entry.getKey().equals(k))
+            if (_entry.getKey() == k)
             {
                 return _entry;
             }
@@ -116,25 +115,26 @@ public class SMap
     /**
      * Allows an insertion into a Map. Given key is mapped to a given value.
      */
-    public void put(String k, int v)
+    public void put(char k, TrieNode v)
     {
-        int hash = k.hashCode() % get_capacity();
+        int hash = (int) k;
         Entry _entry = table[hash];
 
         // Check if the first entry has the same key, if so, update the value.
-        if (_entry.getKey().equals(k))
+        if (_entry.getKey() == k)
         {
             _entry.setValue(v);
             return;
         }
-        // If not, traverse till end. If we find the matching key in the process,
+        // If not, traverse till end. If we find the matching key in the
+        // process,
         // update the value else insert it.
         Entry _next = _entry.getNext();
 
         while (_next != null)
         {
             // Update to new value, if already exist.
-            if (_next.getKey().equals(k))
+            if (_next.getKey() == k)
             {
                 _next.setValue(v);
                 return;
@@ -143,7 +143,8 @@ public class SMap
             _next = _next.getNext();
         }
 
-        // Since nowhere we set the value, its a new entry, add it into the list.
+        // Since nowhere we set the value, its a new entry, add it into the
+        // list.
         Entry _newEntry = new Entry(k, v);
         _entry.setNext(_newEntry);
     }
@@ -152,9 +153,9 @@ public class SMap
     /**
      * Remove a given key from the Map.
      */
-    public Entry remove(String k)
+    public Entry remove(char k)
     {
-        int hash = k.hashCode() % get_capacity();
+        int hash = (int) k;
         Entry _entry = table[hash];
 
         // Null check. If null, there isn's any entry.
@@ -163,21 +164,23 @@ public class SMap
             return null;
         }
 
-        // Check if the first entry has the same key, if so, update the hashtable directly.
-        if (_entry.getKey().equals(k))
+        // Check if the first entry has the same key, if so, update the
+        // hashtable directly.
+        if (_entry.getKey() == k)
         {
             table[hash] = _entry.getNext();
             return _entry;
         }
 
-        // If not, traverse till end. If we find the matching key in the process,
+        // If not, traverse till end. If we find the matching key in the
+        // process,
         // update the value else insert it.
         Entry _next = _entry.getNext();
 
         while (_next != null)
         {
             // If found, move current to next of next.
-            if (_next.getKey().equals(k))
+            if (_next.getKey() == k)
             {
                 _entry.setNext(_next.getNext());
                 return _next;
@@ -189,6 +192,7 @@ public class SMap
         // Not found, return null.
         return null;
     }
+
 
     /**
      * Only a getter for capacity. I dont want to resize the map once it is constructed.
